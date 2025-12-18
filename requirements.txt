@@ -1,0 +1,14 @@
+streamlit
+faiss-cpu
+sentence-transformers
+transformers
+torch
+langchain-community
+pypdf
+numpy
+huggingface-hub
+python-dotenv
+
+
+
+
