@@ -42,12 +42,13 @@ def chunk_text(text, chunk_size=450, overlap=50):
         end = start + chunk_size
         chunks.append(text[start:end])
         start = end - overlap
-
     return chunks
+
 
 model_name = "sentence-transformers/all-MiniLM-L6-v2"
 tokenizer = AutoTokenizer.from_pretrained(model_name)
 model = AutoModel.from_pretrained(model_name)
+
 
 
 def get_embedding(text):
@@ -64,6 +65,7 @@ def get_embedding(text):
     return outputs.last_hidden_state.mean(dim=1).squeeze().numpy()
 
 
+
 def create_vector_store(chunks):
     print("⚙️ Creating embeddings...")
     embeddings = [get_embedding(chunk) for chunk in chunks]
@@ -76,13 +78,13 @@ def create_vector_store(chunks):
     return index
 
 
+
 def retrieve_and_answer(query, index, chunks, qa_pipe, top_k=3):
     query_embedding = get_embedding(query).reshape(1, -1)
     _, indices = index.search(query_embedding, top_k)
 
     retrieved_chunks = [chunks[i] for i in indices[0]]
     context = "\n".join(retrieved_chunks)
-
     prompt = f"""
 Answer ONLY from the context below.
 If the answer is not present, say "Not found in document".
@@ -94,8 +96,10 @@ Question:
 {query}
 """
 
+
     result = qa_pipe(prompt, max_new_tokens=200)
     return result[0]["generated_text"]
+
 
 def initialize_pipeline(uploaded_files):
     print("📂 Reading uploaded documents...")

@@ -4,14 +4,14 @@ from summarizer_pipeline import summarizer
 from chatbot_pipeline import chat_assistant
 
 
-# RAG imports (ONLY RAG is active)
+
 from rag.rag_pipeline import initialize_pipeline, retrieve_and_answer
 
 
 st.set_page_config(page_title="Model Studio", layout="wide")
 st.title("Model Studio")
 
-# ---------- SIDEBAR ----------
+
 st.sidebar.title("Options")
 
 option = st.sidebar.selectbox(
@@ -19,7 +19,6 @@ option = st.sidebar.selectbox(
     ["RAG", "Summarizer", "General Chatbot"]
 )
 
-# ---------- RAG ----------
 if option == "RAG":
     st.header("RAG Question Answering")
 
@@ -27,13 +26,13 @@ if option == "RAG":
     "Upload PDF or TXT files",
     type=["pdf", "txt"],
     accept_multiple_files=True,
-    key="rag_file_uploader"   # 👈 THIS FIXES EVERYTHING
+    key="rag_file_uploader"  
 )
 
 
     query = st.text_input("Enter your question")
 
-    # Initialize RAG only once
+
     if uploaded_files and "rag_ready" not in st.session_state:
         index, chunks, qa_pipe = initialize_pipeline(uploaded_files)
 
@@ -57,7 +56,7 @@ if option == "RAG":
         else:
             st.warning("Upload documents and enter a question")
 
-# ---------- SUMMARIZER ----------
+
 elif option == "Summarizer":
     st.header("Text Summarizer")
     text= st.text_area("Enter the text which you want to summarize:")
@@ -69,7 +68,7 @@ elif option == "Summarizer":
         else:
             st.warning("Please enter text to summarize.")
 
-# ---------- CHATBOT ----------
+
 elif option == "General Chatbot":
     st.title("Chat assistant with AGENTS")
     st.header("General Chatbot")
